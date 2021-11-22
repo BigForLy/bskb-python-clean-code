@@ -97,6 +97,7 @@ DeprecationWarning: Call to deprecated function (or staticmethod) foo. (use anot
   foo()
 deprecated func
 ```
+https://github.com/tantale/deprecated
 
 # Получить query запрос с параметрами
 ```python
