@@ -37,7 +37,7 @@ names = ['Элис', 'Боб', 'Дилберт']
 ... ]
 ```
 
-# Открытие файлов
+# Работа с файлами
 Плохо:
 ```python
 f = open('hello.txt', 'w')
@@ -59,6 +59,7 @@ with open('hello.txt', 'w') as f:
 ```
 
 # Одинарные и двойные подчеркивания, дандеры
+
 1. Одинарный начальный символ подчеркивания: _var
 -----------
 
@@ -79,3 +80,25 @@ with open('hello.txt', 'w') as f:
 определена и объяснена в PEP 8.
 
 # Использование декоратора deprecated
+Если у функции есть несколько версий, необходимо каждую версию переделать в отдельную функцию. Если создается новая версия, то старую необходимо удалить или добавить декоратор deprecated, это же касается классов, неиспользуемые классы необходимо удалить или добавить декоратор.
+
+Методы для каждой версии необходимо именовать по правилам: *Coming soon*
+
+Использование кода:
+```python
+from deprecated import deprecated
+@deprecated(reason="use another function")
+def foo():
+    print('deprecated func')
+```
+Консоль:
+```python
+DeprecationWarning: Call to deprecated function (or staticmethod) foo. (use another function)
+  foo()
+deprecated func
+```
+
+# Получить query запрос с параметрами
+```python
+str(query.statement.compile(compile_kwargs={"literal_binds": True}))
+```
