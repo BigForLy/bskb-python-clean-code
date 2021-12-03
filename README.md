@@ -1,7 +1,87 @@
 # bskb-python-clean-code
 
-# Инструкция assert
+# Избегайте использования плохих имен
+Плохо:
+```python
+c = 0
+```
+Хорошо:
+```python
+columnCount = 0
+```
 
+# Избегайте вводящих в заблуждение имен
+Плохо:
+```python
+day = list(day)
+```
+Хорошо:
+```python
+listOfDay = list(day)
+```
+
+# Избегайте магических констант
+Плохо:
+```python
+if attribute_type == "system":
+   ...
+```
+Хорошо:
+```python
+SYSTEM_ATTRIBUTE_TYPE = "system"
+if attribute_type == SYSTEM_ATTRIBUTE_TYPE:
+   ...
+```
+
+# Избегайте отрицательных условных выражений
+По возможности избегать отрицательных условных выражений, особенно это касается функций и переменных означающих "не ..." (Смотрите пример).
+Плохо:
+```python
+def notSystemTypeAttribute(attributeType):
+   if attributeType != "system":
+      True
+   else:
+      False
+
+if notSystemTypeAttribute(attributeType) != False:  # Двойное отрицание: не системный и не равно
+   ...
+else:
+   ...
+```
+Хорошо:
+```python
+def notSystemTypeAttribute(attributeType):
+   if attributeType != "system":
+      True
+   else:
+      False
+
+if notSystemTypeAttribute(attributeType) = True:
+   ...
+else:
+   ...
+```
+
+# Функции должны делать одно
+Это, безусловно, самое важное правило в разработке программного обеспечения. Когда функции выполняют несколько задач, их сложнее составлять, тестировать и обдумывать. Когда вы можете выделить функцию только для одного действия, их можно легко реорганизовать, и ваш код будет читаться намного чище.
+
+# Не добавляйте ненужный контекст
+Плохо:
+```python
+class Attribute:
+   self.attribute_type = None
+   self.attribute_name = None
+   self.attribute_value = None
+```
+Хорошо:
+```python
+class Attribute:
+   self.type = None
+   self.name = None
+   self.value = None
+```
+
+# Инструкция assert
 Инструкции призваны быть внутренними самопроверками (internal selfchecks) вашей программы. Они работают путем объявления неких условий, возникновение которых в вашем исходном коде невозможно. Если
 одно из таких условий не сохраняется, то это означает, что в программе
 есть ошибка.
@@ -148,3 +228,5 @@ https://github.com/tantale/deprecated
 ```python
 str(query.statement.compile(compile_kwargs={"literal_binds": True}))
 ```
+
+Основная часть материала взята из книги "Чистый Python Дэн Бейбер"
