@@ -1,5 +1,45 @@
 # bskb-python-clean-code
 
+# Правила именования функций, переменных, ...
+1. Для имен переменных и функций используйте подчеркивание, а не camelCase
+-----------
+Плохо:
+```python
+def testFoo():
+    ...
+```
+Хорошо:
+```python
+def test_foo():
+    ...
+```
+
+2. Для имен классов используйте InitialCaps
+-----------
+Плохо:
+```python
+def test_foo():
+    ...
+```
+Хорошо:
+```python
+def TestFoo():
+    ...
+```
+
+3. Имена полей моделей должны быть в нижнем регистре с использованием подчеркивания вместо camelStyle
+-----------
+Плохо:
+```python
+class Person(models.Model):
+    FirstName = models.CharField(max_length=20)
+```
+Хорошо:
+```python
+class Person(models.Model):
+    first_name = models.CharField(max_length=20)
+```
+
 # Избегайте использования плохих имен
 Плохо:
 ```python
@@ -50,13 +90,13 @@ else:
 ```
 Хорошо:
 ```python
-def notSystemTypeAttribute(attributeType):
-   if attributeType != "system":
+def SystemTypeAttribute(attributeType):
+   if attributeType = "system":
       True
    else:
       False
 
-if notSystemTypeAttribute(attributeType) = True:
+if SystemTypeAttribute(attributeType) = False:
    ...
 else:
    ...
@@ -198,6 +238,17 @@ https://github.com/tantale/deprecated
 Если у метода есть несколько версий, то необходимо каждую версию выносить в отдельную функцию.
 
 Методы для каждой версии необходимо именовать по правилам: *Coming soon*
+
+# Стиль моделей
+Имена полей должны быть в нижнем регистре с использованием подчеркивания вместо camelStyle.
+
+Порядок внутренних классов моделей и стандартных методов должен быть следующим:
+* Все поля в базе
+* Настраиваемые атрибуты менеджера
+* class Meta
+* def __str __()
+* def save()
+* def get_absolute_url()
 
 # Правила написания JSON
 Параметры JSON пишутся в стиле camelCase(должен начинаться со строчной буквы, а первая буква каждого последующего слова должна быть заглавной, все слова при этом пишутся слитно между собой.)
