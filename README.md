@@ -92,12 +92,12 @@ else:
 Хорошо:
 ```python
 def SystemTypeAttribute(attributeType):
-   if attributeType = "system":
+   if attributeType == "system":
       True
    else:
       False
 
-if SystemTypeAttribute(attributeType) = False:
+if SystemTypeAttribute(attributeType) == False:
    ...
 else:
    ...
