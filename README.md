@@ -18,12 +18,12 @@ def test_foo():
 -----------
 Плохо:
 ```python
-def test_foo():
+class test_foo():
     ...
 ```
 Хорошо:
 ```python
-def TestFoo():
+class TestFoo():
     ...
 ```
 
@@ -43,7 +43,7 @@ class Person(models.Model):
 # Избегайте использования плохих имен
 Плохо:
 ```python
-c = 0
+c = 0  # Такой пример не несет понятной логики, трудночитаем в проекте
 ```
 Хорошо:
 ```python
@@ -75,6 +75,7 @@ if attribute_type == SYSTEM_ATTRIBUTE_TYPE:
 
 # Избегайте отрицательных условных выражений
 По возможности избегать отрицательных условных выражений, особенно это касается функций и переменных означающих "не ..." (Смотрите пример).
+
 Плохо:
 ```python
 def notSystemTypeAttribute(attributeType):
@@ -237,7 +238,16 @@ https://github.com/tantale/deprecated
 # Версионность методов
 Если у метода есть несколько версий, то необходимо каждую версию выносить в отдельную функцию.
 
-Методы для каждой версии необходимо именовать по правилам: *Coming soon*
+Методы для каждой версии необходимо именовать по правилам: Имя головной функции + _ v + номер версии
+
+Пример:
+```python
+def get_probes_card_by_journal(self, params):
+    if self.version == 1:
+        self.get_probes_card_by_journal_v1(params)
+    elif self.version == 2:
+        self.get_probes_card_by_journal_v2(params)
+```
 
 # Стиль моделей
 Имена полей должны быть в нижнем регистре с использованием подчеркивания вместо camelStyle.
@@ -273,11 +283,6 @@ https://github.com/tantale/deprecated
 ```
 
 # Создание миграций
-Каждая новая миграция должна идти отдельным файлом. Но на продакшн должна уходить одна миграция, для этого необходимо использовать *squashmigrations*.
-
-# Получить query запрос с параметрами
-```python
-str(query.statement.compile(compile_kwargs={"literal_binds": True}))
-```
+Не изменять миграции которые попали в мастер
 
 Основная часть материала взята из книги "Чистый Python Дэн Бейбер"
