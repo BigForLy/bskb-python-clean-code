@@ -282,6 +282,20 @@ def get_probes_card_by_journal(self, params):
 }
 ```
 
+# Singleton
+Singleton - в однопоточном приложении будет единственный экземпляр некоторого класса.
+
+Для Singleton использовать библиотеку ```pip install singleton-decorator```
+
+Пример:
+```python
+@singleton
+class YourClass:
+    def method(self):
+        ...
+```
+Документация: https://pypi.org/project/singleton-decorator/
+
 # Создание миграций
 Не изменять миграции которые попали в мастер
 
