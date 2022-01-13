@@ -299,4 +299,83 @@ class YourClass:
 # Создание миграций
 Не изменять миграции которые попали в мастер
 
+# Правила написания запросов к базе данных
+Использовать select_related, когда объект, который вы собираетесь выбрать, является одним объектом, что означает пересылку ForeignKey, OneToOne и обратный OneToOne.
+
+select_related работает путем создания соединения SQL и включения полей связанного объекта в оператор SELECT. По этой причине select_related получает связанные объекты в том же запросе к базе данных.
+
+База данных для примера:
+```python
+class Publisher(models.Model):
+    name = models.CharField(max_length=300)
+
+    def __str__(self):
+        return self.name
+
+class Book(models.Model):
+    name = models.CharField(max_length=300)
+    price = models.IntegerField(default=0)
+    publisher = models.ForeignKey(Publisher, on_delete=models.CASCADE)
+
+    class Meta:
+        default_related_name = 'books'
+
+    def __str__(self):
+        return self.name
+        
+class Store(models.Model):
+    name = models.CharField(max_length=300)
+    books = models.ManyToManyField(Book)
+
+    class Meta:
+        default_related_name = 'stores'
+
+    def __str__(self):
+        return self.name
+```
+Плохо:
+```python
+queryset = Book.objects.all()
+for book in queryset:
+    books.append({'id': book.id, 'name': book.name, 'publisher': book.publisher.name})
+# Number of Queries : 101
+# При каждом обращении делает новый запрос к базе
+```
+Хорошо:
+```python
+queryset = Book.objects.select_related('publisher').all()
+for book in queryset:
+    books.append({'id': book.id, 'name': book.name, 'publisher': book.publisher.name})
+# Number of Queries : 1
+# Не делает новый запрос к базе при обращение
+```
+
+Использовать prefetch_related, когда собираемся получить набор вещей. Это означает обработку ManyToMany и обратных ManyToMany, ForeignKey. 
+
+prefetch_related выполняет отдельный поиск для каждой связи и выполняет «объединение» в Python. Он отличается от select_related. prefetch_related выполнял JOIN с использованием Python, а не в базе данных.
+
+Плохо:
+```python
+queryset = Store.objects.all()
+stores = []
+for store in queryset:
+    books = [book.name for book in store.books.all()]
+    stores.append({'id': store.id, 'name': store.name, 'books': books})
+# Number of Queries : 11
+# В Store 10 элементов. Здесь происходит один запрос для выборки всех хранилищ, и во время итерации по каждому хранилищу выполняется другой запрос
+```
+Хорошо:
+```python
+queryset = Store.objects.prefetch_related('books')
+stores = []
+for store in queryset:
+    books = [book.name for book in store.books.all()]
+    stores.append({'id': store.id, 'name': store.name, 'books': books})
+# Number of Queries : 2
+```
+
+
+#
+
+
 Основная часть материала взята из книги "Чистый Python Дэн Бейбер"
