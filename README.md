@@ -336,14 +336,16 @@ class Store(models.Model):
 Плохо:
 ```python
 queryset = Book.objects.all()
+books = []
 for book in queryset:
     books.append({'id': book.id, 'name': book.name, 'publisher': book.publisher.name})
 # Number of Queries : 101
-# При каждом обращении делает новый запрос к базе
+# В Book 100 элементов. При каждом обращении делает новый запрос к базе
 ```
 Хорошо:
 ```python
 queryset = Book.objects.select_related('publisher').all()
+books = []
 for book in queryset:
     books.append({'id': book.id, 'name': book.name, 'publisher': book.publisher.name})
 # Number of Queries : 1
@@ -359,9 +361,8 @@ prefetch_related выполняет отдельный поиск для каж�
 queryset = Store.objects.all()
 stores = []
 for store in queryset:
-    books = [book.name for book in store.books.all()]
     stores.append({'id': store.id, 'name': store.name, 'books': books})
-# Number of Queries : 11
+# Number of Queries : 10
 # В Store 10 элементов. Здесь происходит один запрос для выборки всех хранилищ, и во время итерации по каждому хранилищу выполняется другой запрос
 ```
 Хорошо:
@@ -369,9 +370,8 @@ for store in queryset:
 queryset = Store.objects.prefetch_related('books')
 stores = []
 for store in queryset:
-    books = [book.name for book in store.books.all()]
     stores.append({'id': store.id, 'name': store.name, 'books': books})
-# Number of Queries : 2
+# Number of Queries : 1
 ```
 
 # Правила для написания тестов eval()
@@ -379,16 +379,18 @@ eval() выполняет следующую последовательност�
 
 Парсинг выражения. -> Компилирование в байт-код. -> Выполнение кода выражения Python. -> Возвращение результата.
 
-1. Использовать конструкцию try:... except:... запрещено
+1. Использовать конструкцию try:... except:... внутри теста запрещено
 2. Запрещено внутри теста создавать переменные или присваивать значения существующим переменным
 3. Результатом выполнения теста должно быть булевое выражение
 
 Пример:
 ```python
-type(data) dict and "params" in data.keys() and type(data["params"]) dict and "username" in data["params"].keys()
+type(data) == dict and "params" in data.keys() and type(data["params"]) == dict and "username" in data["params"].keys()
 ```
-4. Нельзя передавать конструкции с *if*, *import*, *def*, *class*, *for*, *while*, однако можно использовать *for* для например list comprehension
-5. Аргументы в eval() можно не перадавать, тогда он будет использовать глобальные переменные
+4. Нельзя передавать конструкции с *if*, *import*, *def*, *class*, *for*, *while*, однако можно использовать *for* для например list comprehension и *if* в качестве однострочного *if* 
+```python
+True if ... else False
+```
 
 # Правила оформления статусов ошибок
 1. Добавлять новый статус в общий список статусов ошибок в параметр ERROR_CODE 
