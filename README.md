@@ -428,6 +428,11 @@ True if ... else False
 
 3. Статусы ошибок изменять запрещено, не актуальные статусы должны дополняться комментарием deprecated в коде 
 
+# Получить query запрос с параметрами
+```python
+str(query.statement.compile(compile_kwargs={"literal_binds": True}))
+```
+
 #
 
 Основная часть материала взята из книги "Чистый Python Дэн Бейбер"
