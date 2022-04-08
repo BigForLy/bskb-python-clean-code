@@ -428,6 +428,58 @@ True if ... else False
 
 3. Статусы ошибок изменять запрещено, не актуальные статусы должны дополняться комментарием deprecated в коде 
 
+# Оптимизация MySQL запросов
+1. SELECT поля вместо использования SELECT *
+
+При выполнении исследовательских запросов многие разработчики SQL используют SELECT * (читается как «выбрать все») в качестве сокращения для запроса всех доступных данных из таблицы. Однако, если таблица имеет много полей и много строк, это требует ресурсов базы данных, запрашивая много ненужных данных.
+
+Использование оператора SELECT укажет базе данных запрашивать только те данные, которые вам нужны для удовлетворения бизнес-требований.
+
+2. Избегайте SELECT DISTINCT
+
+SELECT DISTINCT — это удобный способ удалить дубликаты из запроса. SELECT DISTINCT работает путем ГРУППИРОВКИ всех полей в запросе для получения различных результатов. Однако для достижения этой цели требуется большая вычислительная мощность. Избегайте DISTINCT в подзапросах, лучше вынесите их в главный запрос.
+
+3. Создавайте соединения с помощью INNER JOIN (а не WHERE)
+
+Плохо:
+```sql
+SELECT
+  Customers.CustomerID,
+  Customers.name,
+  Sales.LastSaleDate
+FROM Customers,
+     Sales
+WHERE Customers.CustomerID = Sales.CustomerID
+```
+Хорошо:
+```sql
+SELECT
+  Customers.CustomerID,
+  Customers.name,
+  Sales.LastSaleDate
+FROM Customers
+  INNER JOIN Sales
+    ON Customers.CustomerID = Sales.CustomerID
+```
+
+4. Subquery
+
+Если у вас большой subquery и вам необходимо сделать JOIN, лучше сделать JOIN таблиц к subquery, чем таблицы JOIN subquery
+Плохо:
+```sql
+select 
+    * 
+from table
+    JOIN subquery
+```
+Хорошо:
+```sql
+select 
+    * 
+from subquery
+    JOIN table
+```
+
 # Получить query запрос с параметрами
 ```python
 str(query.statement.compile(compile_kwargs={"literal_binds": True}))
