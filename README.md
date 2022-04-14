@@ -40,6 +40,29 @@ class Person(models.Model):
     first_name = models.CharField(max_length=20)
 ```
 
+
+4. Правила именования параметров JSON
+Параметры JSON пишутся в стиле camelCase(должен начинаться со строчной буквы, а первая буква каждого последующего слова должна быть заглавной, все слова при этом пишутся слитно между собой.)
+
+Плохо:
+```json
+{
+    "method": "a",
+    "params": {
+      "filter_date-time": "true"
+    }
+}
+```
+Хорошо:
+```json
+{
+    "method": "a",
+    "params": {
+      "filterDateTime": "true"
+    }
+}
+```
+
 # Избегайте использования плохих имен
 Плохо:
 ```python
@@ -272,28 +295,6 @@ def get_probes_card_by_journal(self, params):
 * def __str __()
 * def save()
 * def get_absolute_url()
-
-# Правила написания JSON
-Параметры JSON пишутся в стиле camelCase(должен начинаться со строчной буквы, а первая буква каждого последующего слова должна быть заглавной, все слова при этом пишутся слитно между собой.)
-
-Плохо:
-```json
-{
-    "method": "a",
-    "params": {
-      "filter_date-time": "true"
-    }
-}
-```
-Хорошо:
-```json
-{
-    "method": "a",
-    "params": {
-      "filterDateTime": "true"
-    }
-}
-```
 
 # Singleton
 Singleton - в однопоточном приложении будет единственный экземпляр некоторого класса.
