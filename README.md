@@ -484,7 +484,7 @@ from subquery
 
 # Получить query запрос с параметрами
 ```python
-str(query.statement.compile(compile_kwargs={"literal_binds": True}))
+str(query.statement.compile(compile_kwargs={"literal_binds": True})).replace('"', '`')
 ```
 
 #
